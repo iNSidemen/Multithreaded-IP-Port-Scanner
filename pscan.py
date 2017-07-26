@@ -36,23 +36,28 @@ def portscan(ips, delay, time):
             if output[i] == 'Listening':
                 print("     " + str(i) + ": " + output[i])
 
-def ipscan(scanip, delay, time):
+def ipscan(delay, time):
     ipsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     ipsock.settimeout(delay)
-    scanip = (".".join(scanip.split('.')[0:-1]) + '.')
-    print(str(time) + " - Scanning [" + scanip + "x] subnet for living hosts..")
-    for i in range(1,254):
-        try:
-            ip = scanip + str(i)
-            socket.gethostbyaddr(ip)
-            activeIP.append(ip)
-        except socket.herror as ex:
-            pass
+    ipsock.connect(("8.8.8.8", 80))
+    scanip = (ipsock.getsockname()[0])
+    activeIP.append(scanip)
+    scanip = (".".join(scanip.split('.')[0:-2]) + '.')
+    print(str(time) + " - Scanning [" + scanip + "x.x] subnet  for living hosts..")
+    for x in range(240,242):
+        for i in range(1,254):
+            try:
+                ip = scanip + str(x) + "." + str(i)
+                socket.gethostbyaddr(ip)
+                activeIP.append(ip)
+            except socket.herror as ex:
+                pass
     print("Active IP's:")
     for i in activeIP:
         print(i)
     prompt = input("Continue with scan? (Y/N): ")
     if prompt == "Y" or "y":
+        ipsock.close()
         portscan(activeIP, delay, time)
     else:
         sys.exit()
@@ -65,12 +70,11 @@ def main():
     # Obtain External IP
     currentIP = json.loads(urlopen("http://ip.jsontest.com/").read().decode('utf-8'))
     currentIP = currentIP["ip"]
-    activeIP.append(currentIP)
 
     # Begin Scan
     delay = int(input("Enter time (in seconds) for socket timeout: "))
     t1 = datetime.now()
-    ipscan(currentIP, delay, t1)
+    ipscan(delay, t1)
 
 if __name__ == '__main__':
     main()
