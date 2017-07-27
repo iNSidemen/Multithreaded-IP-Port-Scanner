@@ -42,8 +42,7 @@ def portscan(hostIP, delay):
 def collect(ipp, port, out):
     if ipp not in endout:
         endout.append("[" + ipp + "] Active")
-    else:
-        endout.append("     " + str(port) + ": " + out)
+    endout.append("     " + str(port) + ": " + out)
 
 def main():
     # Clear Screen
