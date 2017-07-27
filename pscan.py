@@ -23,6 +23,7 @@ def TCPconnect (ip, portNum, delay, output):
 def portscan(hostIP, delay):
     threads = []
     output = {}
+    out = []
     for i in range(1025):
         t = threading.Thread(target=TCPconnect, args=(hostIP, i, delay, output))
         threads.append(t)
@@ -35,7 +36,7 @@ def portscan(hostIP, delay):
 
     for i in range(1025):
         if output[i] == 'Listening':
-            out = ("     " + str(i) + ": " + output[i] + "\n")
+            out.append("     " + str(i) + ": " + output[i] + "\n")
         if i == 1025:
             print("[" + hostIP + "] - " + str(datetime.now()))
 
