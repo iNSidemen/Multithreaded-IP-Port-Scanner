@@ -40,7 +40,7 @@ def portscan(hostIP, delay):
             collect(hostIP, i, output[i])
 
 def collect(ipp, port, out):
-    if ipp not in endout:
+    if ("[" + ipp + "] Active") not in endout:
         endout.append("[" + ipp + "] Active")
     endout.append("     " + str(port) + ": " + out)
 
