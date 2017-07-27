@@ -16,14 +16,15 @@ def TCPconnect (ip, portNum, delay, output):
     except:
         output[portNum] = ''
 
-def portscan(ips, delay, time):
-    for hostIP in ips:
-        print("Port Scan: " + hostIP + "[" + str(time) + "]")
+
+def portscan(delay2, time):
+    for hostIP in activeIP:
+        print("Port Scan: " + hostIP + " - [" + str(time) + "]")
         threads = []
         output = {}
 
         for i in range(1025):
-            t = threading.Thread(target=TCPconnect, args=(hostIP, i, delay, output))
+            t = threading.Thread(target=TCPconnect, args=(hostIP, i, delay2, output))
             threads.append(t)
 
         for i in range(1025):
@@ -36,15 +37,16 @@ def portscan(ips, delay, time):
             if output[i] == 'Listening':
                 print("     " + str(i) + ": " + output[i])
 
-def ipscan(delay, time):
+
+def ipscan(delay1, time):
     ipsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    ipsock.settimeout(delay)
+    ipsock.settimeout(delay1)
     ipsock.connect(("8.8.8.8", 80))
     scanip = (ipsock.getsockname()[0])
     activeIP.append(scanip)
     scanip = (".".join(scanip.split('.')[0:-2]) + '.')
     print(str(time) + " - Scanning [" + scanip + "x.x] subnet  for living hosts..")
-    for x in range(240,242):
+    for x in range(240,243):
         for i in range(1,254):
             try:
                 ip = scanip + str(x) + "." + str(i)
@@ -58,7 +60,7 @@ def ipscan(delay, time):
     prompt = input("Continue with scan? (Y/N): ")
     if prompt == "Y" or "y":
         ipsock.close()
-        portscan(activeIP, delay, time)
+        portscan(delay1, time)
     else:
         sys.exit()
 
@@ -75,6 +77,7 @@ def main():
     delay = int(input("Enter time (in seconds) for socket timeout: "))
     t1 = datetime.now()
     ipscan(delay, t1)
+
 
 if __name__ == '__main__':
     main()
