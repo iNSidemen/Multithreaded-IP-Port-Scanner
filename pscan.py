@@ -13,7 +13,8 @@ def TCPconnect (ip, portNum, delay, output):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.settimeout(delay)
-    try sock.connet(ip)
+    try:
+        sock.connect(ip)
         print("[" + ip + "] Active")
     except:
         pass
