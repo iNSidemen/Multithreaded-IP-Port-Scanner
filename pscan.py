@@ -43,7 +43,7 @@ def portscan(hostIP, delay):
 
 def collect(ipp, string):
     if ipp not in endout:
-        endout.append(ipp)
+        endout.append("[" + ipp + "] Active")
     else:
         endout.append(string)
 
@@ -60,7 +60,7 @@ def main():
     print("Scanning IP range [192.168.x.x] - " + str(datetime.now()))
     for i in activeIP:
         portscan(i, delay)
-    print(endout)
+    print("\n".join(endout))
 
 
 if __name__ == '__main__':
