@@ -8,6 +8,8 @@ for i in range(240,243):
     for x in range(1,254):
         activeIP.append("192.168." + str(i) + "." + str(x))
 
+endout = []
+
 # Initialize Sockets
 def TCPconnect (ip, portNum, delay, output):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -23,7 +25,6 @@ def TCPconnect (ip, portNum, delay, output):
 def portscan(hostIP, delay):
     threads = []
     output = {}
-    out = []
     for i in range(1025):
         t = threading.Thread(target=TCPconnect, args=(hostIP, i, delay, output))
         threads.append(t)
@@ -36,9 +37,15 @@ def portscan(hostIP, delay):
 
     for i in range(1025):
         if output[i] == 'Listening':
-            out.append("     " + str(i) + ": " + output[i] + "\n")
-        if i == 1025:
-            print("[" + hostIP + "] - " + str(datetime.now()))
+            out = ("     " + str(i) + ": " + output[i])
+            collect(hostIP, out)
+
+
+def collect(ipp, string):
+    if ipp not in endout:
+        endout.append(ipp)
+    else:
+        endout.append(string)
 
 def main():
     # Clear Screen
@@ -53,6 +60,7 @@ def main():
     print("Scanning IP range [192.168.x.x] - " + str(datetime.now()))
     for i in activeIP:
         portscan(i, delay)
+    print(endout)
 
 
 if __name__ == '__main__':
