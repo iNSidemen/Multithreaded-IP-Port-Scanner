@@ -37,15 +37,14 @@ def portscan(hostIP, delay):
 
     for i in range(1025):
         if output[i] == 'Listening':
-            out = "     " + str(i) + ": " + output[i]
-            collect(hostIP, out)
+            collect(hostIP, i, output[i])
 
 
-def collect(ipp, string):
+def collect(ipp, port, out):
     if ipp not in endout:
         endout.append("[" + ipp + "] Active")
     else:
-        endout.append(string)
+        endout.append("     " + str(port) + ": " + out)
 
 def main():
     # Clear Screen
