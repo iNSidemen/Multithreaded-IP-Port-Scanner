@@ -37,7 +37,7 @@ def portscan(hostIP, delay):
 
     for i in range(1025):
         if output[i] == 'Listening':
-            out = ("     " + str(i) + ": " + output[i])
+            out = "     " + str(i) + ": " + output[i]
             collect(hostIP, out)
 
 
@@ -60,7 +60,8 @@ def main():
     print("Scanning IP range [192.168.x.x] - " + str(datetime.now()))
     for i in activeIP:
         portscan(i, delay)
-    print("\n".join(endout))
+    for i in endout:
+        print(i)
 
 
 if __name__ == '__main__':
