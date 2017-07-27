@@ -14,11 +14,6 @@ def TCPconnect (ip, portNum, delay, output):
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.settimeout(delay)
     try:
-        sock.gethostname(ip)
-        print("[" + ip + "] - " + str(datetime.now()))
-    except:
-        pass
-    try:
         sock.connect((ip, portNum))
         output[portNum] = 'Listening'
     except:
@@ -28,7 +23,6 @@ def TCPconnect (ip, portNum, delay, output):
 def portscan(hostIP, delay):
     threads = []
     output = {}
-
     for i in range(1025):
         t = threading.Thread(target=TCPconnect, args=(hostIP, i, delay, output))
         threads.append(t)
@@ -41,7 +35,9 @@ def portscan(hostIP, delay):
 
     for i in range(1025):
         if output[i] == 'Listening':
-            print("     " + str(i) + ": " + output[i])
+            out = ("     " + str(i) + ": " + output[i] + "\n")
+        if i == 1025:
+            print("[" + hostIP + "] - " + str(datetime.now()))
 
 def main():
     # Clear Screen
