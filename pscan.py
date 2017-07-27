@@ -14,8 +14,8 @@ def TCPconnect (ip, portNum, delay, output):
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.settimeout(delay)
     try:
-        sock.connect(ip)
-        print("[" + ip + "] Active")
+        sock.gethostname(ip)
+        print("[" + ip + "] - " + str(datetime.now()))
     except:
         pass
     try:
